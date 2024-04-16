@@ -1,6 +1,7 @@
 package com.retail.e_com.serviceimpl;
 
 import com.retail.e_com.cache.CacheStore;
+import com.retail.e_com.util.SimpleResponseStructure;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -30,38 +31,26 @@ import java.util.Random;
 public class AuthServiceImpl implements AuthService{
 
 	private UserRepo userRepo;
-	private SellerRepo sellerRepo;
-	private CustomerRepo customerRepo;
 	private ResponseStructure<UserResponse> responseStructure;
 	private CacheStore<String> otpCache;
 	private CacheStore<User> userCache;
+	private SimpleResponseStructure simpleResponseStructure;
 
 	@Override
-	public ResponseEntity<String> userRegistration(UserRequest userRequest) {
+	public ResponseEntity<SimpleResponseStructure> userRegistration(UserRequest userRequest) {
 		
 		if(userRepo.existsByEmail(userRequest.getEmail()))
 		   throw new UserExistedByEmailException("Invalid user");
-//		if(userRequest.getUserRole().equals(UserRole.CUSTOMER))
-//		{
-//			Customer customer=customerRepo.save(mapToCustomerEntity(userRequest, new Customer()));
-//			return ResponseEntity.ok(responseStructure.setStatusCode(HttpStatus.OK.value())
-//					.setMessage("Customer has been created successfully").setData(mapToUserResponse(customer)));
-//		}
-//		else if(userRequest.getUserRole().equals(UserRole.SELLER))
-//		{
-//			Seller seller = sellerRepo.save(mapToSellerEntity(userRequest,new Seller()));
-//			return ResponseEntity.ok(responseStructure.setStatusCode(HttpStatus.OK.value())
-//					.setMessage("Customer has been created successfully").setData(mapToUserResponse(seller)));
-//		}else {
-//			throw new InvalidUserRoleException("Invalid User");
-//		}
 		User user = mapToChildEntity(userRequest);
 		String otp = generateOtp();
 		otpCache.add("otp",otp);
 		userCache.add("user",user);
 
 
-		return ResponseEntity.ok(otp);
+		return ResponseEntity.ok(simpleResponseStructure.setMessage("Verify OTP Sent through mail to complete the registration " +
+						"! OTP expires in 1 minute")
+				.setStatusCode(HttpStatus.OK.value()));
+
 	}
 
 	@Override
@@ -100,18 +89,6 @@ public class AuthServiceImpl implements AuthService{
 
 	}
 
-//	private Seller mapToSellerEntity(UserRequest userRequest, Seller seller) {
-//		String email = userRequest.getEmail();
-//		seller.setEmail(email);
-//		seller.setIsDeleted(false);
-//		seller.setIsEmailVerified(false);
-//		seller.setUsername(email.substring(0,email.indexOf("@")));
-//		seller.setPassword(userRequest.getPassword());
-//		seller.setDisplayName(userRequest.getName());
-//		seller.setUserRole(userRequest.getUserRole());
-//		return seller;
-//	}
-
 	private UserResponse mapToUserResponse(User user) {
 		
 		return UserResponse.builder().displayName(user.getDisplayName())
@@ -121,16 +98,6 @@ public class AuthServiceImpl implements AuthService{
 				.isEmailVerified(user.getIsEmailVerified()).userRole(user.getUserRole()).build();
 	}
 
-//	private Customer mapToCustomerEntity(UserRequest userRequest, Customer customer) {
-//		String email = userRequest.getEmail();
-//		customer.setEmail(email);
-//		customer.setIsDeleted(false);
-//		customer.setIsEmailVerified(false);
-//		customer.setUsername(email.substring(0,email.indexOf("@")));
-//		customer.setPassword(userRequest.getPassword());
-//		customer.setDisplayName(userRequest.getName());
-//		customer.setUserRole(userRequest.getUserRole());
-//		return customer;
-//	}
+
 	
 }

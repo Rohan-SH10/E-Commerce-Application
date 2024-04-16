@@ -1,5 +1,6 @@
 package com.retail.e_com.service;
 
+import com.retail.e_com.util.SimpleResponseStructure;
 import org.springframework.http.ResponseEntity;
 
 import com.retail.e_com.requestdto.UserRequest;
@@ -8,7 +9,7 @@ import com.retail.e_com.util.ResponseStructure;
 
 public interface AuthService {
 
-	public ResponseEntity<String> userRegistration(UserRequest userRequest);
+	public ResponseEntity<SimpleResponseStructure> userRegistration(UserRequest userRequest);
 
 	ResponseEntity<ResponseStructure<UserResponse>> verifyOtp(String otp);
 }

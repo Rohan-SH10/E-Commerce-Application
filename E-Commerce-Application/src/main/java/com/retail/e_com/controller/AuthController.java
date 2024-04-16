@@ -1,5 +1,6 @@
 package com.retail.e_com.controller;
 
+import com.retail.e_com.util.SimpleResponseStructure;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class AuthController {
 	private AuthService authService;
 
 	@PostMapping("/register")
-	public ResponseEntity<String> userRegistration(@RequestBody UserRequest userRequest){
+	public ResponseEntity<SimpleResponseStructure> userRegistration(@RequestBody UserRequest userRequest){
 		return authService.userRegistration(userRequest);
 	}
 
