@@ -1,10 +1,12 @@
 import React from 'react'
 import Header from './Util/Header'
-import {Outlet} from 'react-router-dom'
-const App = () => {
+import { Outlet } from 'react-router-dom'
+
+const App = (props) => {
+  const userAuth=props?.userAuth;
   return (
     <div>
-      <Header/>
+      <Header userAuth={userAuth} />
       <Outlet/>
     </div>
   )

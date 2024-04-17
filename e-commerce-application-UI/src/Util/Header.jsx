@@ -1,30 +1,102 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CgProfile } from "react-icons/cg";
-import { IoIosArrowDown } from "react-icons/io";
-import { CiSearch } from "react-icons/ci";
-import { BsBox } from "react-icons/bs";
-import { GoHeart } from "react-icons/go";
+import logo from '../image/img1.jpg'
+import { MdOutlineStore } from 'react-icons/md';
+import { BiSearch } from 'react-icons/bi';
+import { IoCartOutline } from 'react-icons/io5';
+import { LuBoxes } from 'react-icons/lu';
+import { FaHeart, FaRegUserCircle } from 'react-icons/fa';
+import { HiMiniBars3BottomLeft } from 'react-icons/hi2';
 
-const Header = () => {
+const Header = (props) => {
+
+  let [isOpen, setIsOpen] = useState(false);
+  let [isMoreOpen, setIsMoreOpen] = useState(false);
+  const links = ["Contact Us","Terms & Conditions"]
+
+  const user = props?.userAuth;
+
+  const { username, authenticated, role } = user;
+
   return (
-    <div className='flex item-center justify-around text-slate-950 text-slate-100 py-2  border-b-2 border-slate-1 text-center text-lg'>
-    <Link to={"/"}><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_exploreplus-44005d.svg" width="160" height="40" title="Flipkart"/></Link>
-    <section className='flex items-center gap-2 bg-slate-200 w-[32rem] rounded-md'><CiSearch /><input className='w-full text-lg bg-slate-200' type="text" placeholder="Search for Products, Brands and More" value="" ></input></section>
-    <Link to={"/login"} className='relative group transition-all'>
-     <p className='flex items-center justify-around  w-24  rounded-md hover:bg-blue-700 hover:text-white'>
-      <CgProfile />Login <IoIosArrowDown className='rotate-180 transition-all hover:rotate-0'/>
-     </p>
-     <div className=' flex justify-around absolute top-10 hidden w-60 flex-col gap-1 rounded-md bg-white py=3  shadow-md transition-all group-hover:flex '>
-      <Link to={"/register"} className='flex item-center gap-5 '>  New customer? <p className='text-blue-600 '>Sing Up</p></Link>
-      <Link to={"#"} className='flex  gap-2'><CgProfile />My Profile</Link>
-      <Link to={"#"} className='flex gap-2 '><BsBox />Orders</Link>
-      <Link to={"/wishlist"} className='flex gap-2 '><GoHeart /> Wishlist</Link>
-     </div>
-    </Link>
-    <Link to={"/register"} className='flex items-center gap-2'><img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/Store-9eeae2.svg" alt="Become a Seller" class="_1XmrCc"/>Become a seller</Link>
-    </div>
+    <nav className='bg-white shadow-md text-slate-100 py-2'>
+      <div className="w-11/12 flex items-center justify-evenly">
+        {/* logo and Link block */}
+        <div className='flex h-6 justify-around items-center w-4/6'>
+          {/* logo */}
+          <Link to={'/'} className='ml-6 w-20'>
+            <img title='H' src={logo} alt='logo' className='rounded w-full' />
+          </Link>
+
+          {/* search bar */}
+          <div className="bg-blue-100 w-full rounded-lg mx-10 flex justify-center items-center">
+            <div className='text-slate-500 flex justify-center items-center w-7 text-2xl m-2 mr-0'><BiSearch /></div>
+            <input
+              type="search"
+              placeholder="Search for Electronics, Brands and More .."
+              className="p-2 bg-transparent w-full focus:outline-none text-slate-700 placeholder:text-slate-500"
+            />
+          </div>
+        </div>
+
+        {/* Nav Links */}
+        <div className='text-slate-600 flex border-black justify-evenly items-center w-2/6'>
+          <Link className='flex hover:bg-blue-500 p-3 rounded items-center' to={authenticated ? "/account" : "/login"}
+            onMouseEnter={() => { setIsOpen((prev) => !prev) }} onMouseLeave={() => { setIsOpen((prev) => !prev) }}>
+            <FaRegUserCircle title='Login' className='mr-2' />
+            {authenticated ?
+              username
+              : <div className=''>Login
+                {isOpen && (
+                  <div className='absolute p-2 mt-3 -ml-12'>
+                    <HeaderLink path={'/register'} linkName={'New Customer? SignUp'} />
+                  </div>
+                )
+                }
+              </div>
+            }
+          </Link>
+
+          {
+            (user != null && user != undefined) ?
+              (authenticated && role === "CUSTOMER")
+                ? <div className='flex'>
+                  <HeaderLink icon={<FaHeart />} linkName={"Wishlist"} path={'/wishlist'} />
+                  <HeaderLink icon={<IoCartOutline />} linkName={"Cart"} path={'/cart'} />
+                </div>
+                : (authenticated && role === "SELLER")
+                  ? <HeaderLink icon={<LuBoxes />} linkName={"Orders"} path={'/orders'} />
+                  : (!authenticated) &&
+                  <HeaderLink linkName={"Become a Seller"} icon={<MdOutlineStore />} path={'/register-seller'} />
+              : <HeaderLink linkName={"Become a Seller"} icon={<MdOutlineStore />} path={'/register-seller'} />
+          }
+          <div className='flex hover:bg-blue-500 p-3 rounded items-center'
+            onMouseEnter={() => { setIsMoreOpen((prev) => !prev) }} onMouseLeave={() => { setIsMoreOpen((prev) => !prev) }}>
+            <HiMiniBars3BottomLeft />
+            <div className='absolute p-2 mt-28 -ml-7'>
+              {isMoreOpen && links.map((item) => (
+                <div>
+                  <HeaderLink key={item} linkName={item} path={'/'} />
+                </div>
+              ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
   )
 }
 
 export default Header
+
+export const HeaderLink = ({ icon, linkName, path }) => {
+  return (
+    <div>
+      <Link className='text-slate-600 flex justify-start items-center' to={path}>
+        <div className='p-1 mr-1'>{icon}</div>
+        <div title={linkName} className='p-1 mr-2'>{linkName}</div>
+      </Link>
+    </div>
+  );
+}

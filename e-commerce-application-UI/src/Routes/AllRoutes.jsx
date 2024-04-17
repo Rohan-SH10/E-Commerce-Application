@@ -1,75 +1,84 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import App from "../App.jsx";
-import Login from "../Public/Login.jsx";
-import SellerDashBoard from "../Private/Seller/SellerDashboard.jsx";
-import AddProduct from "../Private/Seller/AddProduct.jsx";
-import Register from "../Public/Register.jsx";
-import Home from "../Public/Home.jsx";
-import Cart from "../Private/Customer/Cart.jsx";
-import Whishlist from "../Private/Customer/Wishlist.jsx";
-import Explore from "../Private/Customer/Explore.jsx";
-import AddAddress from "../Private/Common/AddAdress.jsx";
-import EditProfile from "../Private/Common/EditProfile.jsx";
-import Orders from "../Private/Seller/Orders.jsx";
-const AllRoutes = () => {
-  const user = {
-    userId: "1",
-    userName: "Hari",
-    role: "CUSTOMER",
-    authenticated: true,
-    accessExpiration: "3600",
-    refreshExpiration: "1296000",
-  };
-  const { role, authenticated } = user;
-  let routes = [];
-  if (authenticated) {
-    role == "SELLER"
-      ? routes.push(
-          <Route
-            key={"sellerdashboard"}
-            path="/sellerdashboard"
-            element={<SellerDashBoard />}
-          />,
-          <Route
-            key={"addproduct"}
-            path="/addproduct"
-            element={<AddProduct />}
-          />,
-          <Route key={"orders"} path="/orders" element={<Orders />} />
-        )
-      : role == "CUSTOMER" &&
-        routes.push(
-          <Route key={"explore"} path="/explore" element={<Explore />} />,
-          <Route key={"cart"} path="/cart" element={<Cart />} />,
-          <Route key={"wishlist"} path="/wishlist" element={<Whishlist />} />
-        );
-    routes.push(
-      <Route key={"home"} path="/" element={<Home />} />,
-      <Route key={"addaddress"} path="/addaddress" element={<AddAddress />} />,
-      <Route
-        key={"editprofile"}
-        path="/editprofile"
-        element={<EditProfile />}
-      />
-    );
-  } else {
-    role === "CUSTOMER" &&
-      routes.push(
-        <Route key={"home"} path="/" element={<Home />} />,
-        <Route key={"login"} path="/login" element={<Login />} />,
-        <Route key={"explore"} path="/explore" element={<Explore />} />,
-        <Route key={"register"} path="/register" element={<Register />} />
-      );
-  }
-  return (
-    <Routes>
-      <Route path="/" element={<App />}>
-        {routes}
-      </Route>
-      ;
-    </Routes>
-  );
-};
+import React from 'react'
+import VerifyOTP from '../Public/VerifyOTP'
+import Cart from './../Private/Customer/Cart';
+import WishList from './../Private/Customer/WishList';
+import AddAddress from './../Private/Common/AddAddress';
+import EditProfile from './../Private/Common/EditProfile';
+import SellerDashboard from './../Private/Seller/SellerDashboard';
+import AddProduct from './../Private/Seller/AddProduct';
+import { Route, Routes } from 'react-router-dom';
+import Login from './../Public/Login';
+import Register from './../Public/Register';
+import Home from './../Public/Home';
+import Orders from './../Private/Customer/Orders';
+import App from './../App';
+import Explore from './../Private/Customer/Explore';
 
-export default AllRoutes;
+const AllRoutes = () => {
+
+    // null or undefined works too
+    // when user directly access URLs we create dummy userAuth object whose role is  authenticated value is false
+    const userAuth = {
+        userId: 123,
+        email: 'veeru17@gmail.com',
+        username: "Veeru",
+        accessExpiration: 3600,
+        refreshExpiration: 1296000,
+        authenticated: false,
+        role: "CUSTOMER"
+    }
+
+    let routes = []
+
+    if (userAuth != null || userAuth != undefined) {
+        const { authenicated, role } = userAuth;
+        if (authenicated) {
+            (role == 'SELLER') ?
+                routes.push(
+                    <Route key={'seller-dashboard'} path='/seller-dashboard' element={<SellerDashboard />} />,
+                    <Route key={'add-product'} path='/add-product' element={<AddProduct />} />,
+                ) : (role == 'CUSTOMER') && routes.push(
+                    <Route key={'orders'} path='/orders' element={<Orders />} />,
+                    <Route key={'cart'} path='/cart' element={<Cart />} />,
+                    <Route key={'wishlist'} path='/wishlist' element={<WishList />} />,
+                    <Route key={'explore'} path='/explore' element={<Explore />} />
+                )
+            //common routes only if authenticated
+            routes.push(
+                <Route key={'add-address'} path='/add-address' element={<AddAddress />} />,
+                <Route key={'account'} path='/account' element={<EditProfile />} />,
+                <Route key={'home'} path='/' element={<Home />} />
+            )
+        }
+        else { //if not authenticated he'll stil be dummy user
+            routes.push(
+                <Route key={'verify-otp'} path='/verify-otp' element={<VerifyOTP />} />,
+                <Route key={'login'} path='/login' element={<Login />} />,
+                <Route key={'register'} path='/register' element={<Register roles={"CUSTOMER"} />} />,
+                <Route key={'register-seller'} path='/register-seller' element={<Register roles={"SELLER"} />} />,
+                <Route key={'home'} path='/' element={<Home />} />
+            )
+        }
+    }
+    else {
+        //pushing all public routes here if error
+        routes.push(
+            <Route key={'verify-otp'} path='/verify-otp' element={<VerifyOTP />} />,
+            <Route key={'login'} path='/login' element={<Login />} />,
+            <Route key={'register'} path='/register' element={<Register roles={"CUSTOMER"} />} />,
+            <Route key={'register-seller'} path='/register-seller' element={<Register roles={"SELLER"} />} />,
+            <Route key={'home'} path='/' element={<Home />} />
+        )
+    }
+    // routes.map((route)=>console.log(route.props.path))
+
+    return (
+        <Routes>
+            <Route path='/' element={<App userAuth={userAuth} />}>
+                {routes}
+            </Route>
+        </Routes>
+    )
+}
+
+export default AllRoutes

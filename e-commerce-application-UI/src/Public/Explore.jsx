@@ -3,7 +3,7 @@ import React from 'react'
 const Explore = () => {
   return (
     <div>
-        Explore
+        User Explore Dashboard
     </div>
   )
 }
