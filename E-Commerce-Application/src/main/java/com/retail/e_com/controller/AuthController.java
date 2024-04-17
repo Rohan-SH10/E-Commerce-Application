@@ -1,5 +1,6 @@
 package com.retail.e_com.controller;
 
+import com.retail.e_com.requestdto.OtpRequest;
 import com.retail.e_com.util.SimpleResponseStructure;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/verify-email")
-	public ResponseEntity<ResponseStructure<UserResponse>> verifyOtp(@RequestParam String otp){
-	return authService.verifyOtp(otp);
+	public ResponseEntity<ResponseStructure<UserResponse>> verifyOtp(@RequestBody OtpRequest otpRequest){
+	return authService.verifyOtp(otpRequest);
 	}
 }

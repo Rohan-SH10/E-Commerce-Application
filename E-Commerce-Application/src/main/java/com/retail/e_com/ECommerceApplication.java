@@ -2,12 +2,13 @@ package com.retail.e_com;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 public class ECommerceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ECommerceApplication.class, args);
+		ApplicationContext context=SpringApplication.run(ECommerceApplication.class, args);
 	}
 
 }

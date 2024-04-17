@@ -1,5 +1,7 @@
 package com.retail.e_com.util;
 
+import com.retail.e_com.exception.OtpExpiredException;
+import com.retail.e_com.exception.RegistrationSessionExpiredException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,5 +33,16 @@ public class ApplicationHandler {
 	public ResponseEntity<ErrorStructure<String>> invalidUserRoleException(InvalidUserRoleException ex)
 	{
 		return errorResponse(HttpStatus.BAD_REQUEST,ex.getMessage(),"Please select role either Seller or Customer");
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure<String>> otpExpiredException(OtpExpiredException ex)
+	{
+		return errorResponse(HttpStatus.BAD_REQUEST,ex.getMessage(),"Otp Expired Please Recieve the otp");
+	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure<String>> registrationSessionExpiredException(RegistrationSessionExpiredException ex)
+	{
+		return errorResponse(HttpStatus.BAD_REQUEST,ex.getMessage(),"Otp Expired Please Recieve the otp");
 	}
 }
