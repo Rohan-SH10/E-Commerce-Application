@@ -1,0 +1,205 @@
+!SESSION 2024-04-18 09:45:22.738 -----------------------------------------------
+eclipse.buildId=4.21.0.202312011804
+java.version=17.0.9
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_IN
+Framework arguments:  -product org.springframework.boot.ide.branding.sts4 -product org.springframework.boot.ide.branding.sts4
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4 -data C:\Users\rohan\OneDrive\Desktop\E-Commerce-Application\E-Commerce-Application -product org.springframework.boot.ide.branding.sts4
+
+!ENTRY org.eclipse.emf.ecore 2 0 2024-04-18 09:45:24.705
+!MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
+
+!ENTRY org.eclipse.equinox.app 0 0 2024-04-18 09:45:25.536
+!MESSAGE Product org.springframework.boot.ide.branding.sts4 could not be found.
+
+!ENTRY org.eclipse.ui 2 0 2024-04-18 09:45:27.548
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2024-04-18 09:45:27.548
+!MESSAGE Commands should really have a category: plug-in='org.springframework.tooling.boot.ls', id='spring.initializr.addStarters', categoryId='org.eclipse.lsp4e.commandCategory'
+
+!ENTRY org.eclipse.ui 2 0 2024-04-18 09:45:28.788
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2024-04-18 09:45:28.788
+!MESSAGE Commands should really have a category: plug-in='org.springframework.tooling.boot.ls', id='spring.initializr.addStarters', categoryId='org.eclipse.lsp4e.commandCategory'
+
+!ENTRY org.eclipse.jface 2 0 2024-04-18 09:45:30.620
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-04-18 09:45:30.620
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-04-18 09:45:34.667
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\rohan'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.036
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.038
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.040
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.042
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.045
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.046
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.048
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.050
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.052
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.055
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.059
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.061
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.063
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.064
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.066
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.076
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.078
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.079
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.080
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.082
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.084
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.085
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.087
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.089
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.090
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.092
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.093
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.095
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.097
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.eclipse.jdt.core 4 -1 2024-04-18 09:45:35.098
+!MESSAGE 'org' is not a valid Java identifier
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:36.672
+!MESSAGE Ignored property with key: null value: null
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.120
+!MESSAGE Could not create Segment Analytics instance, missing writeKey.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.123
+!MESSAGE Could not send USER event 'Anonymous ID: c96fdc7d-d5f8-44d7-b413-751d1a76fde2': no analytics instance present.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.125
+!MESSAGE Could not create Segment Analytics instance, missing writeKey.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.126
+!MESSAGE Could not send STARTUP event 'startup': no analytics instance present.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.129
+!MESSAGE Could not create Segment Analytics instance, missing writeKey.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.130
+!MESSAGE Could not send USER event 'Anonymous ID: c96fdc7d-d5f8-44d7-b413-751d1a76fde2': no analytics instance present.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.131
+!MESSAGE Could not create Segment Analytics instance, missing writeKey.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.132
+!MESSAGE Could not send ACTION event 'installed': no analytics instance present.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.136
+!MESSAGE Ignored property with key: null value: null
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.140
+!MESSAGE Could not create Segment Analytics instance, missing writeKey.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.141
+!MESSAGE Could not send USER event 'Anonymous ID: c96fdc7d-d5f8-44d7-b413-751d1a76fde2': no analytics instance present.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.143
+!MESSAGE Could not create Segment Analytics instance, missing writeKey.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.144
+!MESSAGE Could not send STARTUP event 'startup': no analytics instance present.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.146
+!MESSAGE Could not create Segment Analytics instance, missing writeKey.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.147
+!MESSAGE Could not send USER event 'Anonymous ID: c96fdc7d-d5f8-44d7-b413-751d1a76fde2': no analytics instance present.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.149
+!MESSAGE Could not create Segment Analytics instance, missing writeKey.
+
+!ENTRY org.jboss.tools.usage 2 0 2024-04-18 09:45:37.150
+!MESSAGE Could not send ACTION event 'showOnStartup': no analytics instance present.
+
+!ENTRY org.eclipse.core.jobs 4 2 2024-04-18 09:45:58.003
+!MESSAGE An internal error occurred during: "Update Job".
+!STACK 0
+java.lang.NullPointerException: Cannot invoke "org.eclipse.equinox.internal.p2.ui.sdk.scheduler.AutomaticUpdatePlugin.getPreferenceStore()" because the return value of "org.eclipse.equinox.internal.p2.ui.sdk.scheduler.AutomaticUpdatePlugin.getDefault()" is null
+	at org.eclipse.equinox.internal.p2.ui.sdk.scheduler.migration.MigrationSupport.getLastMigration(MigrationSupport.java:260)
+	at org.eclipse.equinox.internal.p2.ui.sdk.scheduler.migration.MigrationSupport.baseChangedSinceLastPresentationOfWizard(MigrationSupport.java:216)
+	at org.eclipse.equinox.internal.p2.ui.sdk.scheduler.migration.MigrationSupport.performMigration(MigrationSupport.java:82)
+	at org.eclipse.equinox.internal.p2.ui.sdk.scheduler.AutomaticUpdateScheduler$1.run(AutomaticUpdateScheduler.java:76)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)

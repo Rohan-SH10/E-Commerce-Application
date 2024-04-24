@@ -1,0 +1,53 @@
+package com.ecommerce.retail_electronicsapp.jwt;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+
+@Service
+public class JwtService  {
+
+	
+	@Value("${myapp.jwt.secret}")
+	private String secret;
+	
+	@Value("${myapp.jwt.access.expiration}")
+	private long accessExpiry;
+	
+	@Value("${myapp.jwt.refresh.expiration}")
+	private long refreshExpiry;
+	
+	public String createAccessToken(String username) {
+		return genereateToken(accessExpiry, username);
+		
+	}
+	public String createRefreshToken(String username) {
+		return genereateToken(refreshExpiry, username);
+	}
+	
+	private String genereateToken(long expiration, String username) {
+		Map<String,Object> uniqueMap = new HashMap<String,Object>();
+		uniqueMap.put(username, expiration);
+		return Jwts.builder().setSubject(username)
+		.setIssuedAt(new Date(System.currentTimeMillis()))
+		.setExpiration(new Date(System.currentTimeMillis()+expiration))
+		.setClaims(uniqueMap)
+		.signWith(getSignatureKey(),SignatureAlgorithm.HS256)
+		.compact();
+	}
+	
+	private Key getSignatureKey() {
+//		byte[] decode = Decoders.BASE64.decode(secret);
+		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+	}
+}

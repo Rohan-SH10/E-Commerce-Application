@@ -13,25 +13,18 @@ import Home from './../Public/Home';
 import Orders from './../Private/Customer/Orders';
 import App from './../App';
 import Explore from './../Private/Customer/Explore';
+import { useAuth } from './../Auth/AuthProvider';
 
 const AllRoutes = () => {
 
-    // null or undefined works too
-    // when user directly access URLs we create dummy userAuth object whose role is  authenticated value is false
-    const userAuth = {
-        userId: 123,
-        email: 'veeru17@gmail.com',
-        username: "Veeru",
-        accessExpiration: 3600,
-        refreshExpiration: 1296000,
-        authenticated: false,
-        role: "CUSTOMER"
-    }
+    // when user directly access URLs we create dummy userAuth object whose role is CUST authenticated value is false
+    // dummy user by default will be available everywhere
+    const {user}=useAuth()
 
     let routes = []
 
-    if (userAuth != null || userAuth != undefined) {
-        const { authenicated, role } = userAuth;
+    if (user != null || user != undefined) {
+        const { authenicated, role } = user;
         if (authenicated) {
             (role == 'SELLER') ?
                 routes.push(
@@ -54,8 +47,8 @@ const AllRoutes = () => {
             routes.push(
                 <Route key={'verify-otp'} path='/verify-otp' element={<VerifyOTP />} />,
                 <Route key={'login'} path='/login' element={<Login />} />,
-                <Route key={'register'} path='/register' element={<Register roles={"CUSTOMER"} />} />,
-                <Route key={'register-seller'} path='/register-seller' element={<Register roles={"SELLER"} />} />,
+                <Route key={'register'} path='/register' element={<Register role={"CUSTOMER"} />} />,
+                <Route key={'register-seller'} path='/register-seller' element={<Register role={"SELLER"} />} />,
                 <Route key={'home'} path='/' element={<Home />} />
             )
         }
@@ -65,8 +58,8 @@ const AllRoutes = () => {
         routes.push(
             <Route key={'verify-otp'} path='/verify-otp' element={<VerifyOTP />} />,
             <Route key={'login'} path='/login' element={<Login />} />,
-            <Route key={'register'} path='/register' element={<Register roles={"CUSTOMER"} />} />,
-            <Route key={'register-seller'} path='/register-seller' element={<Register roles={"SELLER"} />} />,
+            <Route key={'register'} path='/register' element={<Register role={"CUSTOMER"} />} />,
+            <Route key={'register-seller'} path='/register-seller' element={<Register role={"SELLER"} />} />,
             <Route key={'home'} path='/' element={<Home />} />
         )
     }
@@ -74,7 +67,7 @@ const AllRoutes = () => {
 
     return (
         <Routes>
-            <Route path='/' element={<App userAuth={userAuth} />}>
+            <Route path='/' element={<App user={user} />}>
                 {routes}
             </Route>
         </Routes>
