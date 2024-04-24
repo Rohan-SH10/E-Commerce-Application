@@ -1,0 +1,21 @@
+package com.ecommerce.retail_electronicsapp.entity;
+
+
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class RefreshToken {
+
+	private int tokenId;
+	private String token;
+	private long expiration;
+	private boolean isBlocked;
+}

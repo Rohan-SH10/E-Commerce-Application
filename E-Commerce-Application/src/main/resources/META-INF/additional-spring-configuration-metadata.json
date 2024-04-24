@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "myapp.jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'myapp.jwt.secret'"
+  },
+  {
+    "name": "myapp.jwt.refresh.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'myapp.jwt.refresh.expiration'"
+  },
+  {
+    "name": "myapp.jwt.access.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'myapp.jwt.access.expiration'"
+  }
+]}

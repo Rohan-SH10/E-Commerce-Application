@@ -1,0 +1,5 @@
+package com.ecommerce.retail_electronicsapp.utility;
+
+public class TokenResponseStructure {
+
+}

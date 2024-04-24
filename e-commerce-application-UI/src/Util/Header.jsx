@@ -7,6 +7,7 @@ import { IoCartOutline } from 'react-icons/io5';
 import { LuBoxes } from 'react-icons/lu';
 import { FaHeart, FaRegUserCircle } from 'react-icons/fa';
 import { HiMiniBars3BottomLeft } from 'react-icons/hi2';
+import { useAuth } from '../Auth/AuthProvider';
 
 const Header = (props) => {
 
@@ -14,7 +15,7 @@ const Header = (props) => {
   let [isMoreOpen, setIsMoreOpen] = useState(false);
   const links = ["Contact Us","Terms & Conditions"]
 
-  const user = props?.userAuth;
+  const { user, updateUser } = useAuth()
 
   const { username, authenticated, role } = user;
 
