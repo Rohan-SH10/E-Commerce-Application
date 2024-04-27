@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../Util/Button';
 import Input from '../Util/Input';
 import Label from '../Util/Label';
 import { useAuth } from '../Auth/AuthProvider';
+import usePreviousPath from '../Routes/usePreviousPath';
 
 const VerifyOTP = () => {
-  const { user, updateUser } = useAuth()
+  const { user, setUser } = useAuth()
   const { state } = useLocation();
+  const previousPath = usePreviousPath();
   const email = state && state?.data;
   const [otp, setOTP] = useState('');
+  const [buttonChange, setButtonChange] = useState(false)
   const [otpLenError, setOtpLenError] = useState(false)
 
   const [otpData, setOtpData] = useState({})
   const navigate = useNavigate()
   const Otpregex = /^(\d{6})$/;
+
   const handleOTPChange = (name, value) => {
     setOTP(value);
     if (name === 'otp' && !Otpregex.test(value)) setOtpLenError(true);
@@ -27,17 +31,22 @@ const VerifyOTP = () => {
   // if (regex.test(value)) {
   const verifyOTPApi = async () => {
     try {
+      if (previousPath !== "/register" || previousPath !== "/register-seller") {
+        navigate("/", { replace: true });
+      }
       const { data } = await axios.post(`http://localhost:8080/api/re-v1/verify-email`, otpData);
       // console.log(data);
-      navigate("/", { state: { data: data } });
+      setButtonChange(true)
+      navigate("/", { state: { success:"register", userResponse: data } });
     } catch (error) {
-      console.error(error.data?.rootCause);
+      setButtonChange(false)
+      alert(error.data?.rootCause);
     }
   }
 
   useEffect(() => {
-    console.log("otp verify page rendered")
-  }, [])
+
+  }, []);
 
   return (
     <div className="flex justify-center bg-gray-300 items-center h-dvh">
@@ -52,14 +61,14 @@ const VerifyOTP = () => {
           id="loginsec2"
           className="w-[500px] bg-gray-100 rounded-b-md flex justify-around items-center h-[300px] "
         >
-          
+
           <div
             id="logsubsec"
             className=" h-[300px] w-[300px] flex flex-col justify-around "
           >
             <div id="textbox" className='py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7'>
               <div className='relative'>
-                
+
                 <Input id='otp'
                   name='otp'
                   type="text"
@@ -70,7 +79,10 @@ const VerifyOTP = () => {
                 <Label label={'Enter OTP'} htmlFor={'otp'}
                 />
                 {otpLenError && <p className="text-red-500 text-sm mt-1">Please enter 6 digits OTP sent to your email</p>}
-                <Button onClick={verifyOTPApi} text='Verify'
+                <Button
+                  onClick={verifyOTPApi}
+                  text='Verify'
+                  disabled={buttonChange}
                 />
               </div>
             </div>

@@ -6,60 +6,79 @@ import { AiOutlineLaptop } from 'react-icons/ai';
 import Input from '../Util/Input';
 import Label from '../Util/Label';
 import Button from '../Util/Button';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../Auth/AuthProvider';
+import axios from 'axios';
 
 const Login = () => {
-  const { user, updateUser } = useAuth()
-  const navigate=useNavigate
+  const { user, setUser } = useAuth()
+  const navigate = useNavigate()
+  // const { state } = useLocation();
+  // let response=null
+  // if(state?.success==="register")
+  //   response=state&&state?.userResponse
+  // if(response){
+  //   let {userId,username,isEmailVerified,userRole}=response
+  //   setUser({
+  //     ...user,
+  //     userId:userId,
+  //     username:username,
+  //     userRole:userRole,
+  //     authenticated:isEmailVerified,
+  //     accessExpiration:0,
+  //     refreshExpiration:0
+  //   })
+  // }
   let [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   })
-  const [emailInputError, setEmailInputError] = useState(false);
+  const [usernameInputError, setUsernameInputError] = useState(false);
   const [passInputError, setPassInputError] = useState(false);
 
   const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
   // regex to match atleast one uppercase, one special character, one number and must be 8 characters or more
-  const emailRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*@gmail\.com$/;
+  const usernameRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*@gmail\.com$/;
 
-  const handleSubmit = async (event) => {
-    let { email } = formData
+  const [showPassword, setShowPassword] = useState(false);
+
+  const showOrHidePassHandle = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const handleSubmit = async () => {
     try {
-      event.target.disabled=true
-      // let { data } = await axios.post(`http://localhost:8080/api/re-v1/login`, formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     }
-      //   });
-      console.log(email)
+      console.log(formData)
+      let { data: { data } } = await axios.post(`http://localhost:8080/api/re-v1/login`, formData,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          withCredentials: true
+        });
+      console.log(data)
+      setUser({ ...data, authenticated: true })
       // hook can't be navigated to another without being inside tags/with no operation done in normal method
-      // navigate("/", { state: { data: email } });
+      navigate("/", { state: { success: "login", authResponse: data } });
     }
     catch (error) {
-      console.log(error)
-      event.target.disabled=false
-      // alert(error.data?.data?.rootCause)
+      // console.log(error)
+      alert(error)
     }
   };
   const handleInputChange = (name, value) => {
     //event object destructured here
-    if (name === 'email') {
-      setFormData({ ...formData, email: value });
-      if (!emailRegex.test(value)) setEmailInputError(true);
-      else {
-        setEmailInputError(false);
-
-      }
+    if (name === 'username') {
+      setFormData({ ...formData, username: value });
+      if (value==='') setUsernameInputError(false);
+      else if (!usernameRegex.test(value)) setUsernameInputError(true);
+      else setUsernameInputError(false);
     }
     else if (name === 'password') {
       setFormData({ ...formData, password: value });
-      if (!passwordRegex.test(value)) setPassInputError(true);
-      else {
-        setPassInputError(false);
-
-      }
+      if (value==='') setPassInputError(false);
+      else if (!passwordRegex.test(value)) setPassInputError(true);
+      else setPassInputError(false);
     }
   };
 
@@ -92,23 +111,36 @@ const Login = () => {
           >
             <div id="textbox" className='py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7'>
               <div className='relative'>
-                <Input id='email'
-                  name='email'
+                <Input id='username'
+                  name='username'
                   onChange={handleInputChange}
                   type="text"
-                  placeholder="Enter the Email"
+                  placeholder="Enter the Email or Username"
                 />
-                <Label htmlFor="email" label='Email' />
-                {emailInputError && <p className="text-red-500 text-sm mt-1">Please enter a valid Gmail ID.</p>}
+                <Label htmlFor="username" label='Username/Email' />
+                {usernameInputError && <p className="text-red-500 text-sm mt-1">Please enter a valid Gmail ID.</p>}
               </div>
               <div className='relative'>
-                <Input id='password'
-                  name='password'
+                <Input
+                  id="password"
+                  name="password"
                   onChange={handleInputChange}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Enter the Password"
                 />
-                <Label htmlFor="password" label='Password' />
+                <Label htmlFor="password" label="Password" />
+                <div className="mt-4 flex items-center text-gray-500">
+                  <input
+                    onClickCapture={showOrHidePassHandle}
+                    type="checkbox"
+                    id="showpassword"
+                    name="showpassword"
+                    className="mr-2"
+                  />
+                  <label className="text-sm" htmlFor="showpassword">
+                    Show password
+                  </label>
+                </div>
                 {passInputError && <p className="text-red-500 text-sm mt-1">Password should have 8+ and atleast one uppercase, one special character, one number</p>}
               </div>
             </div>

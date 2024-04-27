@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from './Util/Header'
 import { Outlet } from 'react-router-dom'
 import { useAuth } from './Auth/AuthProvider'
 
 const App = (props) => {
   const { user, updateUser } = useAuth()
-  console.log(user)
-  const userAuth = props?.userAuth;
+  // console.log(user)
+
+  useEffect(()=>{
+
+  },[])
   return (
       <div>
-        <Header userAuth={userAuth} />
+        <Header users={user} />
         <Outlet />
       </div>
   )

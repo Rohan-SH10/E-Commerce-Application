@@ -50,7 +50,12 @@ public class JwtService  {
 		return parseJwtClaims(token).get("role", String.class);
 	}
 	
-	
+	public Date getIssuedAt(String token) {
+		return parseJwtClaims(token).getIssuedAt();
+	}
+	public Date getExpiration(String token) {
+		return parseJwtClaims(token).getExpiration();
+	}
 	private String genereateToken(long expiration,String role, String username) {
 //		Map<String,Object> uniqueMap = new 
 //		uniqueMap.put(username+" "+new Random().nextInt(100000,999999),username );

@@ -116,8 +116,8 @@ public class JwtFilter extends OncePerRequestFilter {
 	            errors.put("error", "Unauthorized, access token has expired");
 	            errors.put("message", e.getMessage());
 	            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-	            new ObjectMapper().writeValue(response.getOutputStream(),
-	            		TokenResponseStructure.failure(errors));
+//	            new ObjectMapper().writeValue(response.getOutputStream(),
+//	            		TokenResponseStructure.failure(errors));
 	            return;
 	        } catch (JwtException e) {
 	            // Handling JWT exception
@@ -126,8 +126,8 @@ public class JwtFilter extends OncePerRequestFilter {
 	            errors.put("error", "Unauthorized, malformed token or invalid signature");
 	            errors.put("message", e.getMessage());
 	            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-	            new ObjectMapper().writeValue(response.getOutputStream(),
-	                    TokenResponseStructure.failure(errors));
+//	            new ObjectMapper().writeValue(response.getOutputStream(),
+//	                    TokenResponseStructure.failure(errors));
 	            return;
 	        }
 		}

@@ -20,6 +20,7 @@ import com.ecommerce.retail_electronicsapp.exceptions.EmailInvalidException;
 import com.ecommerce.retail_electronicsapp.exceptions.IllegalAccessRequestExcpetion;
 import com.ecommerce.retail_electronicsapp.exceptions.OTPExpiredException;
 import com.ecommerce.retail_electronicsapp.exceptions.RegistrationSessionExpiredException;
+import com.ecommerce.retail_electronicsapp.exceptions.TokenExpiredException;
 import com.ecommerce.retail_electronicsapp.exceptions.TokenIsBlockedException;
 import com.ecommerce.retail_electronicsapp.exceptions.UsernameAlreadyExistsException;
 import com.ecommerce.retail_electronicsapp.service.impl.OTPInvalidException;
@@ -98,5 +99,10 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 	@ExceptionHandler
 	public ResponseEntity<ErrorStructure<String>> handleTokenIsBlocked(TokenIsBlockedException accessexception){
 		return errorResponse(HttpStatus.UNAUTHORIZED,accessexception.getMessage(),"Sorry Token is blocked please login");
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity<ErrorStructure<String>> handleTokenExpiredBlocked(TokenExpiredException accessexception){
+		return errorResponse(HttpStatus.UNAUTHORIZED,accessexception.getMessage(),"Sorry Token is Expired please login");
 	}
 }

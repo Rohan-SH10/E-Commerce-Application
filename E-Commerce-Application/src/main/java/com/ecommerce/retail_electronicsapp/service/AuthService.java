@@ -11,6 +11,7 @@ import com.ecommerce.retail_electronicsapp.utility.ResponseStructure;
 import com.ecommerce.retail_electronicsapp.utility.SimpleResponseStructure;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 public interface AuthService {
@@ -20,4 +21,9 @@ public interface AuthService {
 	ResponseEntity<ResponseStructure<UserResponse>> verifyOTP(OTPRequest otpRequest);
 
 	ResponseEntity<ResponseStructure<AuthResponse>> userLogin( AuthRequest authRequest);
+
+
+	ResponseEntity<SimpleResponseStructure> logout(String accessToken, String refreshToken);
+
+	ResponseEntity<ResponseStructure<AuthResponse>> refreshRequest(String accessToken, String refreshToken);
 }

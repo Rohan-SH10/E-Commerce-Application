@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ import com.ecommerce.retail_electronicsapp.utility.ResponseStructure;
 import com.ecommerce.retail_electronicsapp.utility.SimpleResponseStructure;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -39,7 +41,7 @@ public class AuthController {
 	public ResponseEntity<SimpleResponseStructure> userRegistration(@RequestBody @Valid UserRequest userRequest) throws MessagingException {
 		return authService.userRegistration(userRequest);
 	}
-	@PostMapping("/log")
+	@PostMapping("/login")
 	public ResponseEntity<ResponseStructure<AuthResponse>> userLogin(@RequestBody @Valid AuthRequest authRequest) throws MessagingException {
 		return authService.userLogin(authRequest);
 	}
@@ -49,11 +51,22 @@ public class AuthController {
 		return authService.verifyOTP(otpRequest);
 	}
 	
-	@PreAuthorize("CUSTOMER")
-	@GetMapping("/test")
-	public String test() {
-		return "Hello Boss";
+	@PostMapping("/logout")
+	public ResponseEntity<SimpleResponseStructure> logout(@CookieValue(required = false,value="at") String accessToken,@CookieValue(required = false,value="rt") String refreshToken){
+		return authService.logout(accessToken,refreshToken);
 	}
+	
+	@GetMapping("refresh-request")
+	public ResponseEntity<ResponseStructure<AuthResponse>> refreshRequest(@CookieValue(required = false,value="at") String accessToken,@CookieValue(required = false,value="rt") String refreshToken){
+		return authService.refreshRequest(accessToken,refreshToken);
+	}
+	
+	
+//	@PreAuthorize("CUSTOMER")
+//	@GetMapping("/test")
+//	public String test() {
+//		return "Hello Boss";
+//	}
 	
 //	@GetMapping("/generateAccess")
 //	public ResponseEntity<String> generateToken(@RequestParam String username){

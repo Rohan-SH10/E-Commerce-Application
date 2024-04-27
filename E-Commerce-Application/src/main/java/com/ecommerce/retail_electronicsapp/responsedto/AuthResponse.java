@@ -1,5 +1,7 @@
 package com.ecommerce.retail_electronicsapp.responsedto;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Value;
 
 import com.ecommerce.retail_electronicsapp.enums.UserRole;
@@ -20,11 +22,13 @@ public class AuthResponse {
 	private int userId;
 	private String username;
 	
+	private String displayName;
+	private LocalDateTime accessExpiration;
 	
-	private long accessExpiration;
-	
-	private long refreshExpiration;
+	private LocalDateTime refreshExpiration;
 	private UserRole userRole;
+	private boolean authenticated;
+	
 	
 //	public AuthResponse(@Value("${myapp.jwt.access.expiration}") long access,@Value("${myapp.jwt.refresh.expiration}") long refresh) {
 //		this.accessExpiration=access/1000;
