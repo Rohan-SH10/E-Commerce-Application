@@ -1,0 +1,8 @@
+package com.ecommerce.retail_electronicsapp.requestdto;
+
+public class FilterOptions {
+
+	int minPrice;
+	int maxPrice;
+	
+}

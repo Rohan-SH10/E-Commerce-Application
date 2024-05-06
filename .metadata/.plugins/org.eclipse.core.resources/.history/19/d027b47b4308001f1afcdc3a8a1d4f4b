@@ -1,0 +1,13 @@
+package com.ecommerce.retail_electronicsapp.service;
+
+import org.springframework.http.ResponseEntity;
+
+import com.ecommerce.retail_electronicsapp.requestdto.ProductRequest;
+import com.ecommerce.retail_electronicsapp.responsedto.ProductResponse;
+import com.ecommerce.retail_electronicsapp.utility.ResponseStructure;
+
+public interface ProductService {
+
+	ResponseEntity<ResponseStructure<ProductResponse>> addProduct(ProductRequest productRequest);
+
+}

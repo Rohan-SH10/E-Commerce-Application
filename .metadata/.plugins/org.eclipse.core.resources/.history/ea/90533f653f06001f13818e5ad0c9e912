@@ -1,0 +1,42 @@
+package com.ecommerce.retail_electronicsapp.controller;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ecommerce.retail_electronicsapp.requestdto.AddressRequest;
+import com.ecommerce.retail_electronicsapp.requestdto.ContactRequest;
+import com.ecommerce.retail_electronicsapp.responsedto.AddressResponse;
+import com.ecommerce.retail_electronicsapp.responsedto.ContactResponse;
+import com.ecommerce.retail_electronicsapp.service.AddressService;
+import com.ecommerce.retail_electronicsapp.utility.ResponseStructure;
+
+import lombok.AllArgsConstructor;
+
+@RestController
+@AllArgsConstructor
+//@RequestMapping("/api/re-v1")
+public class AddressController {
+
+	private AddressService addressService;
+	
+	@PostMapping("/add-address")
+	public ResponseEntity<ResponseStructure<AddressResponse>> addAddress(@CookieValue(required = false,value = "at") String accessToken, @RequestBody AddressRequest addressRequest){
+		return addressService.addAddress(accessToken,addressRequest);
+	}
+	
+	@PostMapping("/add-contact/{addressId}")
+	public ResponseEntity<ResponseStructure<ContactResponse>> addContact(@PathVariable int addressId,@RequestBody ContactRequest contactRequest){
+		return addressService.addContact(addressId,contactRequest);
+	}
+	
+	@PostMapping("/find-all-addresses")
+	public ResponseEntity<ResponseStructure<List<AddressResponse>>> findAddress(@CookieValue(required = false,value = "at") String accessToken){
+		return addressService.findAddress(accessToken);
+	}
+}

@@ -1,0 +1,13 @@
+package com.ecommerce.retail_electronicsapp.requestdto;
+
+public class SearchFilters {
+
+	int minPrice;
+	int maxPrice;
+	String availability;
+	String category;
+	int rating;
+	int discount;
+	
+	
+}

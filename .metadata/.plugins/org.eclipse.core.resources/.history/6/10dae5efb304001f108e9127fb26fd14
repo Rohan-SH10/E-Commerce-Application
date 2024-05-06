@@ -1,0 +1,13 @@
+package com.ecommerce.retail_electronicsapp.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.ecommerce.retail_electronicsapp.entity.Address;
+import com.ecommerce.retail_electronicsapp.entity.Contact;
+
+public interface AddressRepository extends JpaRepository<Address, Integer>{
+
+
+}

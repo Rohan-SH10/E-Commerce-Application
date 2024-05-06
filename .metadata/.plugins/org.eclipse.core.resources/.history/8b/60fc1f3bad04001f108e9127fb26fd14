@@ -1,0 +1,154 @@
+package com.ecommerce.retail_electronicsapp.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.ecommerce.retail_electronicsapp.entity.Address;
+import com.ecommerce.retail_electronicsapp.entity.Contact;
+import com.ecommerce.retail_electronicsapp.entity.Customer;
+import com.ecommerce.retail_electronicsapp.entity.Seller;
+import com.ecommerce.retail_electronicsapp.entity.User;
+import com.ecommerce.retail_electronicsapp.jwt.JwtService;
+import com.ecommerce.retail_electronicsapp.repository.AddressRepository;
+import com.ecommerce.retail_electronicsapp.repository.ContactRepository;
+import com.ecommerce.retail_electronicsapp.repository.CustomerRepository;
+import com.ecommerce.retail_electronicsapp.repository.SellerRepository;
+import com.ecommerce.retail_electronicsapp.repository.UserRepository;
+import com.ecommerce.retail_electronicsapp.requestdto.AddressRequest;
+import com.ecommerce.retail_electronicsapp.requestdto.ContactRequest;
+import com.ecommerce.retail_electronicsapp.responsedto.AddressResponse;
+import com.ecommerce.retail_electronicsapp.responsedto.ContactResponse;
+import com.ecommerce.retail_electronicsapp.service.AddressService;
+import com.ecommerce.retail_electronicsapp.utility.ResponseStructure;
+
+import lombok.AllArgsConstructor;
+
+@Service
+@AllArgsConstructor
+
+public class AddressServiceImpl implements AddressService{
+
+	private AddressRepository addressRepo;
+	private ContactRepository contactRepo;
+	private UserRepository userRepo;
+	private JwtService jwtService;
+	private SellerRepository sellerRepository;
+	private ResponseStructure<AddressResponse> addressResponseStructure;
+	private ResponseStructure<ContactResponse> contactResponseStructure;
+	private CustomerRepository customerRepo;
+	@Override
+	public ResponseEntity<ResponseStructure<AddressResponse>> addAddress(String accessToken,AddressRequest addressRequest) {
+		String username=jwtService.getUsername(accessToken);
+		System.out.println(username);
+		User user = userRepo.findByUsername(username).get();
+		Address address = mapToAddressEntity(addressRequest,user); 
+		//address=addressRepo.save(address);
+		return ResponseEntity.status(HttpStatus.CREATED).body( addressResponseStructure.setData(mapToAddressResponse(address))
+				.setMessage("Address Created")
+				.setStatusCode(HttpStatus.CREATED.value()));
+	}
+
+	private AddressResponse mapToAddressResponse(Address address) {
+
+		return AddressResponse.builder()
+				.addressId(address.getAddressId())
+				.streetAddress(address.getStreetAddress())
+				.streetAddressAdditional(address.getStreetAddressAdditional())
+				.addressType(address.getAddressType())
+				.city(address.getCity())
+				.state(address.getState())
+				.country(address.getCountry())
+				.pincode(address.getPincode())
+				.contact(address.getContact())
+				.customer(address.getCustomer())
+				.build();
+	}
+
+	private Address mapToAddressEntity(AddressRequest addressRequest,User user) {
+
+		Address address= new Address();
+		if(user.getUserRole().name().equals("SELLER")) {
+			Seller s = (Seller) user;
+			//			if(sellerRepository.existsByAddress(s.getAddress())) throw new RuntimeException();
+			if(s.getAddress()==null) {
+				address.setStreetAddress(addressRequest.getStreetAddress())
+				.setStreetAddressAdditional(addressRequest.getStreetAddressAdditional())
+				.setCity(addressRequest.getCity())
+				.setCountry(addressRequest.getCountry())
+				.setPincode(addressRequest.getPincode())
+				.setState(addressRequest.getState())
+				.setAddressType(addressRequest.getAddressType());
+				addressRepo.save(address);
+				s.setAddress(address);
+				sellerRepository.save(s);
+				return address;
+			}
+			else throw new RuntimeException(); 
+		}
+		else {
+			Customer c = (Customer) user;
+			List<Address> ads=new ArrayList<>();
+			if(c.getAddress().size()<5) {
+				address.setStreetAddress(addressRequest.getStreetAddress())
+				.setStreetAddressAdditional(addressRequest.getStreetAddressAdditional())
+				.setCity(addressRequest.getCity())
+				.setCountry(addressRequest.getCountry())
+				.setPincode(addressRequest.getPincode())
+				.setState(addressRequest.getState())
+				.setAddressType(addressRequest.getAddressType())
+				.setCustomer(c);
+				ads.add(address);
+				c.setAddress(ads);
+				customerRepo.save(c);
+
+				return address;
+			}
+			else throw new RuntimeException();
+		}
+	}
+	@Override
+	public ResponseEntity<ResponseStructure<ContactResponse>> addContact(int addressId, ContactRequest contactRequest) {
+
+		
+		Address address = addressRepo.findById(addressId).get();
+		List<Contact> contacts = address.getContact();
+		Contact contact = mapToContactEntity(contactRequest);
+		if(address.getContact().size()>2) throw new RuntimeException();			
+		
+		contacts.add(contact);
+		address.setContact(contacts);
+		contact=contactRepo.save(contact);
+		addressRepo.save(address);
+		
+		
+		
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(contactResponseStructure.setData(mapToContactResponse(contact))
+				.setStatusCode(HttpStatus.CREATED.value())
+				.setMessage("Contact Saved"));
+	}
+
+	private ContactResponse mapToContactResponse(Contact contact) {
+		return ContactResponse.builder()
+				.name(contact.getName())
+				.contactId(contact.getContactId())
+				.contactNumber(contact.getContactNumber())
+				.email(contact.getEmail())
+				.priority(contact.getPriority())
+				.build();
+	}
+
+	private Contact mapToContactEntity(ContactRequest contactRequest) {
+		Contact contact = new Contact();
+
+		contact.setContactNumber(contactRequest.getContactNumber())
+		.setEmail(contactRequest.getEmail())
+		.setName(contactRequest.getName())
+		.setPriority(contactRequest.getPriority());
+		return contact;
+	}
+}

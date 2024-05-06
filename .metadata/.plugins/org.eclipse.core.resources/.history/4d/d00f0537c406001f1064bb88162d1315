@@ -1,0 +1,51 @@
+package com.ecommerce.retail_electronicsapp.requestdto;
+
+import com.ecommerce.retail_electronicsapp.enums.AddressType;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class AddressRequest {
+
+	@NotNull
+	@NotBlank
+	private String streetAddress;
+	
+	@NotNull
+	@NotBlank
+	private String streetAddressAdditional;
+	
+	@Pattern(regexp = "^[a-zA-Z]+$\r\n", 
+			message = "city must contain only alphabetes")
+	@NotNull(message = "Please specify a city to be displayed")
+	@NotBlank(message = "City cannot be empty")
+	private String city;
+	
+	@Pattern(regexp = "^[a-zA-Z]+$\r\n", 
+			message = "State must contain only alphabetes")
+	@NotNull(message = "Please specify a State to be displayed")
+	@NotBlank(message = "State cannot be empty")
+	private String state;
+	
+	
+	@Pattern(regexp = "^[a-zA-Z]+$\r\n", 
+			message = "country must contain only alphabetes")
+	@NotNull(message = "Please specify a country to be displayed")
+	@NotBlank(message = "country cannot be empty")
+	private String country;
+	
+	@NotNull 
+	private int pincode;
+	
+	@NotNull(message = "Please specify address type ")
+	private AddressType addressType;
+}

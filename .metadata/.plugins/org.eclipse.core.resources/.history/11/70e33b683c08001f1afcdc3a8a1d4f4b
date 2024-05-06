@@ -1,0 +1,44 @@
+package com.ecommerce.retail_electronicsapp.entity;
+
+import com.ecommerce.retail_electronicsapp.enums.AvailabilityStatus;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+public class Product {
+
+	@Id
+	private int productId;
+	private String productName;
+	private String productDescription;
+	private int productPrice;
+	private int productQuantity;
+	private AvailabilityStatus availabilityStatus;
+	public Product setProductId(int productId) {
+		this.productId = productId;
+		return this;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	public void setProductDescription(String productDescription) {
+		this.productDescription = productDescription;
+	}
+	public void setProductPrice(int productPrice) {
+		this.productPrice = productPrice;
+	}
+	public void setProductQuantity(int productQuantity) {
+		this.productQuantity = productQuantity;
+	}
+	public void setAvailabilityStatus(AvailabilityStatus availabilityStatus) {
+		this.availabilityStatus = availabilityStatus;
+	}
+	
+}

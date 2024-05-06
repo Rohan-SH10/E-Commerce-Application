@@ -1,0 +1,34 @@
+package com.ecommerce.retail_electronicsapp.service;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+
+import com.ecommerce.retail_electronicsapp.entity.Address;
+import com.ecommerce.retail_electronicsapp.entity.Contact;
+import com.ecommerce.retail_electronicsapp.requestdto.AddressRequest;
+import com.ecommerce.retail_electronicsapp.requestdto.ContactRequest;
+import com.ecommerce.retail_electronicsapp.responsedto.AddressResponse;
+import com.ecommerce.retail_electronicsapp.responsedto.ContactResponse;
+import com.ecommerce.retail_electronicsapp.utility.ResponseStructure;
+
+public interface AddressService {
+
+//	ResponseEntity<ResponseStructure<AddressResponse>> addAddress(String token,AddressRequest addressRequest);
+//
+//	ResponseEntity<ResponseStructure<ContactResponse>> addContact(int addressId,ContactRequest contactRequest);
+//
+//	ResponseEntity<ResponseStructure<List<AddressResponse>>> findAddress(String accessToken);
+	
+	public ResponseEntity<ResponseStructure<Address>> addAddressToUser(AddressRequest addressRequest, String accessToken) ;
+
+	public ResponseEntity<ResponseStructure<Address>> updateAddress(int addressId, AddressRequest addressRequest, String accessToken);
+	
+	public ResponseEntity<ResponseStructure<List<Address>>> fetchAddress(String accessToken);
+	
+	public ResponseEntity<ResponseStructure<List<Contact>>> addContactsToAddress(String accessToken, int addressId,List<ContactRequest> contactRequests) ;
+
+	public ResponseEntity<ResponseStructure<Contact>> updateContact(String accessToken, int contactId, ContactRequest contactRequest);
+
+}
+

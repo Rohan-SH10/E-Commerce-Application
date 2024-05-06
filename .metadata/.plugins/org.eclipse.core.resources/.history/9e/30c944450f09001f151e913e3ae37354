@@ -1,0 +1,41 @@
+package com.ecommerce.retail_electronicsapp.entity;
+
+import com.ecommerce.retail_electronicsapp.enums.ImageType;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@AllArgsConstructor 
+@NoArgsConstructor
+public class Image {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int imageId;
+	@Enumerated(EnumType.STRING)
+	private ImageType imageType;
+	private byte[] imagesBytes;
+	public Image setImageId(int imageId) {
+		this.imageId = imageId;
+		return this;
+	}
+	public Image setImageType(ImageType imageType) {
+		this.imageType = imageType;
+		return this;
+	}
+	public Image setImagesBytes(byte[] imagesBytes) {
+		this.imagesBytes = imagesBytes;
+		return this;
+	}
+	
+	
+}

@@ -1,0 +1,26 @@
+package com.ecommerce.retail_electronicsapp.service.impl;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.ecommerce.retail_electronicsapp.repository.ProductReository;
+import com.ecommerce.retail_electronicsapp.requestdto.ProductRequest;
+import com.ecommerce.retail_electronicsapp.responsedto.ProductResponse;
+import com.ecommerce.retail_electronicsapp.service.ProductService;
+import com.ecommerce.retail_electronicsapp.utility.ResponseStructure;
+
+import lombok.AllArgsConstructor;
+
+@Service
+@AllArgsConstructor
+public class ProductServiceImpl implements ProductService{
+
+	private ProductReository productRepo;
+	private ResponseStructure<ProductResponse> responseStructure;
+	@Override
+	public ResponseEntity<ResponseStructure<ProductResponse>> addProduct(ProductRequest productRequest) {
+		
+		return null;
+	}
+
+}

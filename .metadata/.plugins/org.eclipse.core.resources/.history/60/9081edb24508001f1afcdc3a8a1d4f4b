@@ -1,0 +1,44 @@
+package com.ecommerce.retail_electronicsapp.service.impl;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import com.ecommerce.retail_electronicsapp.repository.ProductReository;
+import com.ecommerce.retail_electronicsapp.repository.SellerRepository;
+import com.ecommerce.retail_electronicsapp.requestdto.ProductRequest;
+import com.ecommerce.retail_electronicsapp.responsedto.ProductResponse;
+import com.ecommerce.retail_electronicsapp.service.ProductService;
+import com.ecommerce.retail_electronicsapp.utility.ResponseStructure;
+
+import lombok.AllArgsConstructor;
+
+@Service
+@AllArgsConstructor
+public class ProductServiceImpl implements ProductService{
+
+	private SellerRepository sellerRepository;
+	private ProductReository productRepo;
+	private ResponseStructure<ProductResponse> responseStructure;
+	@Override
+	public ResponseEntity<ResponseStructure<ProductResponse>> addProduct(ProductRequest productRequest) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(authentication.getPrincipal().toString());
+		return null;
+	}
+	@Override
+	public ResponseEntity<ResponseStructure<ProductResponse>> updateProduct(int productId,
+			ProductRequest productRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ResponseEntity<ResponseStructure<List<ProductResponse>>> fetchProducts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
