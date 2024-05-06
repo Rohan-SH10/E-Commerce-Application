@@ -15,7 +15,7 @@
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.ecommerce.retail_electronicsapp.RetailElectronicsApplication"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="E-Commerce-Application"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.springframework.ide.eclipse.boot.launch.BootMavenSourcePathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Delectronics.app.pwd=yqwcueakhwnjeciv&#13;&#10;-Dsecret.key=95nMOJzBJfBmIwhJrDf8aJk4mh/clh5GmzO0YQwnBIo="/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Delectronics.app.pwd=yqwcueakhwnjeciv&#13;&#10;-Djwt.secret=95nMOJzBJfBmIwhJrDf8aJk4mh/clh5GmzO0YQwnBIo="/>
     <stringAttribute key="process_factory_id" value="org.springframework.ide.eclipse.boot.launch.process.BootProcessFactory"/>
     <booleanAttribute key="spring.boot.ansi.console" value="true"/>
     <stringAttribute key="spring.boot.app.properties" value=""/>

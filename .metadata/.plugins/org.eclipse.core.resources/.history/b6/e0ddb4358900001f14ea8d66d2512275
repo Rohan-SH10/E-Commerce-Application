@@ -1,5 +1,0 @@
-package com.ecommerce.retail_electronicsapp.repository;
-
-public interface RefreshTokenRepository {
-
-}

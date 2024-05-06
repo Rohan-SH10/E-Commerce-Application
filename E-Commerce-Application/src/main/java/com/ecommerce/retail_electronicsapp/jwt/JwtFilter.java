@@ -8,17 +8,15 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ecommerce.retail_electronicsapp.exceptions.AccountAceessRequestDeniedException;
-import com.ecommerce.retail_electronicsapp.exceptions.TokenIsBlockedException;
 import com.ecommerce.retail_electronicsapp.repository.AccessTokenRepository;
 import com.ecommerce.retail_electronicsapp.repository.RefreshTokenRepository;
-import com.ecommerce.retail_electronicsapp.repository.UserRepository;
 import com.ecommerce.retail_electronicsapp.utility.TokenResponseStructure;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,51 +27,25 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 
-@Component
-@AllArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-	private AccessTokenRepository accessRepository;
-	private RefreshTokenRepository refreshRepository;
+	private AccessTokenRepository accessRepo;
+	private RefreshTokenRepository refreshRepo;
 	private JwtService jwtService;
-	private UserRepository userRepo;
+	
+	public JwtFilter(AccessTokenRepository accessRepo, RefreshTokenRepository refreshRepo, JwtService jwtService) {
+		super();
+		this.accessRepo = accessRepo;
+		this.refreshRepo = refreshRepo;
+		this.jwtService = jwtService;
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-//		String at = null;
-//		String rt = null;
-//		Cookie[] cookies = request.getCookies();
-//		if (cookies != null) {
-//			for (Cookie cookie : cookies) {
-//				if (cookie.getName().equalsIgnoreCase("at"))
-//					at = cookie.getValue();
-//				if (cookie.getName().equalsIgnoreCase("rt"))
-//					rt = cookie.getValue();
-//
-//			}
-//		}
-//		if (rt != null && at != null) {
-//			if (accessRepository.existsByTokenAndIsBlocked(at, true)
-//					&& refreshRepository.existsByTokenAndIsBlocked(rt, true)) {
-//				throw new TokenIsBlockedException("Token is blocked");
-//			}
-//			
-//			System.out.println("at and rt are valid");
-//			String username = jwtService.getUsername(at);
-//			String userRole = jwtService.getUserRole(at);
-//			if (username != null && SecurityContextHolder.getContext().getAuthentication() == null
-//					&& userRole != null) {
-//				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null,
-//						Collections.singleton(new SimpleGrantedAuthority(userRole)));
-//				token.setDetails(new WebAuthenticationDetails(request));
-//				SecurityContextHolder.getContext().setAuthentication(token);
-//			}
-//		}
-
+		System.out.println("inside jwt filter");
 		Cookie[] cookies = request.getCookies();
 		String accessToken=null;
 		String refreshToken=null;
@@ -83,41 +55,50 @@ public class JwtFilter extends OncePerRequestFilter {
 //							.get(0);
 
 		if(cookies!=null) {
-			for(Cookie cookie:cookies) {
-				accessToken= cookie.getAttribute("at");
-				refreshToken= cookie.getAttribute("rt");
+			System.out.println("cookies are present");
+			for(int i=0;i<cookies.length;i++) {
+				if(cookies[i].getName().equals("at"))
+					accessToken=cookies[i].getValue();
+				else if(cookies[i].getName().equals("rt"))
+					refreshToken=cookies[i].getValue();
 			}
 		}
 
 		String userRole=null,username=null;
 		if(accessToken!=null && refreshToken!=null) {
+			System.out.println("both tokens are present");
 			try {
-	            if(accessRepository.existsByTokenAndIsBlocked(accessToken,true)
-	                    || refreshRepository.existsByTokenAndIsBlocked(refreshToken,true)) 
+	            if(accessRepo.existsByTokenAndIsBlocked(accessToken,true)
+	                    && refreshRepo.existsByTokenAndIsBlocked(refreshToken,true)) 
 	                throw new AccountAceessRequestDeniedException("Access for this account is blocked");
 
 	            else {
 	                username=jwtService.getUsername(accessToken);
+	                System.out.println(username);
 	                userRole=jwtService.getUserRole(accessToken);
-	                if(username!=null && userRole!=null && SecurityContextHolder.getContext().getAuthentication()==null) {
-	                    UsernamePasswordAuthenticationToken token=
-	                            new UsernamePasswordAuthenticationToken(username
-	                                    , null
-	                                    , Collections.singleton(new SimpleGrantedAuthority(userRole)));
-	                    token.setDetails(new WebAuthenticationDetails(request));
-	                    SecurityContextHolder.getContext().setAuthentication(token);
-	                    System.out.println(token.getName());
+	                System.out.println(userRole);
+	                if (username != null && userRole != null) {
+	                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	                    if (authentication == null || !authentication.isAuthenticated()) {
+	                        UsernamePasswordAuthenticationToken token =
+	                                new UsernamePasswordAuthenticationToken(username, null, Collections.singleton(new SimpleGrantedAuthority(userRole)));
+	                        token.setDetails(new WebAuthenticationDetails(request));
+	                        SecurityContextHolder.getContext().setAuthentication(token);
+	                        System.out.println(token.getName());
+	                        System.out.println("authentication object was null");
+	                    }
 	                }
 	            }
-	        } catch (ExpiredJwtException e) {
+	        } 
+			catch (ExpiredJwtException e) {
 	            // Handling JWTExpired exception
 	        	response.setStatus(HttpStatus.UNAUTHORIZED.value());
 	            Map<String, String> errors = new HashMap<>();
 	            errors.put("error", "Unauthorized, access token has expired");
 	            errors.put("message", e.getMessage());
 	            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//	            new ObjectMapper().writeValue(response.getOutputStream(),
-//	            		TokenResponseStructure.failure(errors));
+	            new ObjectMapper().writeValue(response.getOutputStream(),
+	            		TokenResponseStructure.failure(errors));
 	            return;
 	        } catch (JwtException e) {
 	            // Handling JWT exception
@@ -126,13 +107,13 @@ public class JwtFilter extends OncePerRequestFilter {
 	            errors.put("error", "Unauthorized, malformed token or invalid signature");
 	            errors.put("message", e.getMessage());
 	            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//	            new ObjectMapper().writeValue(response.getOutputStream(),
-//	                    TokenResponseStructure.failure(errors));
+	            new ObjectMapper().writeValue(response.getOutputStream(),
+	                    TokenResponseStructure.failure(errors));
 	            return;
 	        }
 		}
+//		else even if one of the tokens are empty allow to pass through other filters since user might be trying to login thus allow
+
 		filterChain.doFilter(request, response);
-
 	}
-
 }

@@ -1,26 +1,23 @@
 package com.ecommerce.retail_electronicsapp.repository;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ecommerce.retail_electronicsapp.entity.RefreshToken;
-import com.ecommerce.retail_electronicsapp.entity.User;
 
-public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Integer>{
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Integer> {
 
-	boolean existsByTokenAndIsBlocked(String rt, boolean b);
+	boolean existsByTokenAndIsBlockedTrue(String refreshToken);
 
 	Optional<RefreshToken> findByToken(String refreshToken);
 
+	List<RefreshToken> findAllByExpirationLessThan(Date date);
+
+	boolean existsByTokenAndIsBlocked(String refreshToken, boolean b);
+
 	boolean existsByToken(String refreshToken);
-
-	List<RefreshToken> findAllByIsBlocked(boolean b);
-
-	void deleteAllByIsBlockedTrue();
-
-	Iterable<? extends RefreshToken> findAllByExpirationLessThan(LocalDateTime now);
 
 }

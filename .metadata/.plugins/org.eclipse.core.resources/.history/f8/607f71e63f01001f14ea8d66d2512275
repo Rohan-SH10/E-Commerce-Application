@@ -1,5 +1,0 @@
-package com.ecommerce.retail_electronicsapp.exceptions;
-
-public class TokenIsBlockedException extends Exception {
-
-}

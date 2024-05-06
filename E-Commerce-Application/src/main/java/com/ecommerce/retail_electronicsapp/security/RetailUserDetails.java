@@ -1,10 +1,8 @@
 package com.ecommerce.retail_electronicsapp.security;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ecommerce.retail_electronicsapp.entity.User;
@@ -16,10 +14,14 @@ import lombok.AllArgsConstructor;
 public class RetailUserDetails implements UserDetails{
 
 	private User user;
+	//can also have seperately
+//	private String username;
+//	private String password;
+//	private UserRole role;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singleton(new SimpleGrantedAuthority(user.getUserRole().name()));
+		return null;
 	}
 
 	@Override

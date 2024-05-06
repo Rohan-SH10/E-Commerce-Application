@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-@Getter
+@Getter @SuppressWarnings("serial")
 public class AccountAceessRequestDeniedException extends RuntimeException {
 
 	private String message;

@@ -6,6 +6,8 @@
 			<item value="org.eclipse.jdt.ui.java"/>
 			<item value="org.eclipse.jpt.jaxb"/>
 		</list>
+		<section name="NewWizard.dialogBounds">
+		</section>
 	</section>
 	<section name="WorkbenchPreferenceDialog">
 		<item key="DIALOG_X_ORIGIN" value="593"/>

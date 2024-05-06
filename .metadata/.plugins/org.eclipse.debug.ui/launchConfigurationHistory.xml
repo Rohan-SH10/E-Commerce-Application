@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchHistory>
-    <launchGroup id="org.eclipse.debug.ui.launchGroup.profile">
+    <launchGroup id="org.hibernate.eclipse.launch.ConsoleConfigurationLaunchGroup">
         <mruHistory/>
         <favorites/>
     </launchGroup>
-    <launchGroup id="org.hibernate.eclipse.launch.ConsoleConfigurationLaunchGroup">
+    <launchGroup id="org.eclipse.debug.ui.launchGroup.profile">
         <mruHistory/>
         <favorites/>
     </launchGroup>

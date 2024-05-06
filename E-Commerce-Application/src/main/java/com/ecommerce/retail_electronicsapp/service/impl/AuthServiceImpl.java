@@ -1,29 +1,21 @@
 package com.ecommerce.retail_electronicsapp.service.impl;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Optional;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.reactive.HttpComponentsClientHttpConnector;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.function.ServerRequest.Headers;
 
 import com.ecommerce.retail_electronicsapp.cache.CacheStore;
 import com.ecommerce.retail_electronicsapp.entity.AccessToken;
@@ -34,9 +26,11 @@ import com.ecommerce.retail_electronicsapp.entity.User;
 import com.ecommerce.retail_electronicsapp.enums.UserRole;
 import com.ecommerce.retail_electronicsapp.exceptions.EmailAlreadyExistsException;
 import com.ecommerce.retail_electronicsapp.exceptions.IllegalAccessRequestExcpetion;
+import com.ecommerce.retail_electronicsapp.exceptions.InvalidLoginRequestException;
+import com.ecommerce.retail_electronicsapp.exceptions.JwtTokensMissingException;
 import com.ecommerce.retail_electronicsapp.exceptions.OTPExpiredException;
+import com.ecommerce.retail_electronicsapp.exceptions.OTPInvalidException;
 import com.ecommerce.retail_electronicsapp.exceptions.RegistrationSessionExpiredException;
-import com.ecommerce.retail_electronicsapp.exceptions.TokenExpiredException;
 import com.ecommerce.retail_electronicsapp.jwt.JwtService;
 import com.ecommerce.retail_electronicsapp.mailservice.MailService;
 import com.ecommerce.retail_electronicsapp.mailservice.MessageModel;
@@ -53,10 +47,6 @@ import com.ecommerce.retail_electronicsapp.utility.ResponseStructure;
 import com.ecommerce.retail_electronicsapp.utility.SimpleResponseStructure;
 
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 
 @Service
 
@@ -144,7 +134,8 @@ public class AuthServiceImpl implements AuthService {
 
 
 	@Override
-	public ResponseEntity<ResponseStructure<AuthResponse>> userLogin(AuthRequest authRequest) {
+	public ResponseEntity<ResponseStructure<AuthResponse>> userLogin(AuthRequest authRequest,String accessToken,String refreshToken) {
+		if(accessToken==null && refreshToken!=null) throw new InvalidLoginRequestException("user already logged in, send a refresh request");
 		String username = authRequest.getUsername().split("@gmail.com")[0];
 
 		System.err.println(username);
@@ -153,7 +144,7 @@ public class AuthServiceImpl implements AuthService {
 		try {
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(username, authRequest.getPassword()));
-
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 			System.out.println(authentication.isAuthenticated());
 
 			if(! authentication.isAuthenticated())throw new RuntimeException();
@@ -179,17 +170,17 @@ public class AuthServiceImpl implements AuthService {
 
 
 	@Override
-	public ResponseEntity<SimpleResponseStructure> logout(String accessToken, String refreshToken) {
+	public ResponseEntity<SimpleResponseStructure> userLogout(String accessToken, String refreshToken) {
 
-		if(accessToken==null && refreshToken==null) throw new TokenExpiredException("Token Not Found");
+		if(accessToken==null && refreshToken==null) throw new JwtTokensMissingException("Token Not Found");
 
 		AccessToken aToken = accessTokenRepository.findByToken(accessToken).get();
 		RefreshToken rToken = refreshTokenRepository.findByToken(refreshToken).get();
 
-		aToken.setBlocked(true);
+		aToken.setIsBlocked(true);
 		accessTokenRepository.save(aToken);
 
-		rToken.setBlocked(true);
+		rToken.setIsBlocked(true);
 		refreshTokenRepository.save(rToken);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -203,16 +194,16 @@ public class AuthServiceImpl implements AuthService {
 
 	
 	@Override
-	public ResponseEntity<ResponseStructure<AuthResponse>> refreshRequest(String accessToken, String refreshToken) {
+	public ResponseEntity<ResponseStructure<AuthResponse>> refreshAccessTokens(String accessToken, String refreshToken) {
 		HttpHeaders headers=new HttpHeaders();
 		
 		//if(accessToken==null && refreshToken==null) throw new TokenExpiredException("User Logged Out");
 		if(accessTokenRepository.existsByToken(accessToken)) {
 			AccessToken at = accessTokenRepository.findByToken(accessToken).get();
-			at.setBlocked(true);
+			at.setIsBlocked(true);
 			accessTokenRepository.save(at);
 		}
-		if(!refreshTokenRepository.existsByToken(refreshToken))throw new TokenExpiredException("User is Logged out");
+		if(!refreshTokenRepository.existsByToken(refreshToken))throw new JwtTokensMissingException("User is Logged out");
 		RefreshToken rt = refreshTokenRepository.findByToken(refreshToken).get();
 		
 		if(jwtService.getIssuedAt(refreshToken).before(new Date())) {
@@ -285,7 +276,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private User mapToUsersChildEntity(UserRequest userRequest) {
-		UserRole role=userRequest.getRole();
+		UserRole role=userRequest.getUserRole();
 		User user=null;
 
 		switch(role) {
@@ -313,8 +304,8 @@ public class AuthServiceImpl implements AuthService {
 				.userRole(user.getUserRole())
 				.displayName(user.getDisplayName())
 				.authenticated(user.isEmailVerified())
-				.accessExpiration(LocalDateTime.now().plusSeconds(accessExpiration/1000))
-				.refreshExpiration(LocalDateTime.now().plusSeconds(refreshExpiration/1000))
+				.accessExpiration(accessExpiration)
+				.refreshExpiration(refreshExpiration)
 				.build();
 
 
@@ -328,8 +319,8 @@ public class AuthServiceImpl implements AuthService {
 		AccessToken accessToken = new AccessToken();
 		accessToken.setToken(token);
 		accessToken.setUser(user);
-		accessToken.setBlocked(false);
-		accessToken.setExpiration(LocalDateTime.now().plusSeconds(accessExpiration/1000));
+		accessToken.setIsBlocked(false);
+		accessToken.setExpiration(new Date(new Date().getTime()+(accessExpiration)));
 		accessTokenRepository.save(accessToken);
 	}
 
@@ -352,8 +343,8 @@ public class AuthServiceImpl implements AuthService {
 		RefreshToken refreshToken = new RefreshToken();
 		refreshToken.setToken(token);
 		refreshToken.setUser(user);
-		refreshToken.setBlocked(false);
-		refreshToken.setExpiration(LocalDateTime.now().plusSeconds(refreshExpiration/1000));
+		refreshToken.setIsBlocked(false);
+		refreshToken.setExpiration(new Date(new Date().getTime()+(refreshExpiration)));
 		refreshTokenRepository.save(refreshToken);
 
 	}

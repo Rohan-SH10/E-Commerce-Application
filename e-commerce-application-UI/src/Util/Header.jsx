@@ -35,7 +35,7 @@ const Header = () => {
     if (confirmed) {
       try {
         // Perform logout logic
-        await axios.post("http://localhost:8080/api/re-v1/logout", null, {
+        let {data:data}=await axios.post("http://localhost:8080/api/re-v1/logout", null, {
           withCredentials: true
         });
         // Update user state
@@ -47,6 +47,7 @@ const Header = () => {
           accessExpiration: 0,
           refreshExpiration: 0
         });
+        localStorage.removeItem("user")
         navigate("/", { state: { logoutResponse: data } });
       } catch (error) {
         console.error("Logout failed:", error);
@@ -54,9 +55,9 @@ const Header = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(username, authenticated, userRole);
-  }, [user]);
+  // useEffect(() => {
+  //   console.log(username, authenticated, userRole);
+  // }, [user]);
 
   return (
     <nav className="bg-white shadow-md text-slate-100 py-2">
@@ -106,42 +107,13 @@ const Header = () => {
               <div>
                 {/* <Link to={'/account'} className='-ml-1'>{username}</Link> */}
                 {isOpen && (
-                  <div className="absolute bg-white rounded p-1 mt-7 -ml-24">
+                  <div className="absolute bg-white rounded px-4 py-1 mt-7 -ml-28">
                     <HeaderLink
                       icon={
                         <RxExit size={"18px"} className="" title="Logout" />
                       }
                       linkName={"Logout"}
                       onClick={handleLogout}
-                      // onClick={async () => {
-                      //   const result = await confirmLogout();
-                      //   if (result === true) {
-                      //     let {
-                      //       data: { data },
-                      //     } = await axios.post(
-                      //       "http://localhost:8080/api/re-v1/logout",
-                      //       null,
-                      //       {
-                      //         headers: {},
-                      //         withCredentials: true,
-                      //       }
-                      //     );
-                      //     setUser({
-                      //       ...user,
-                      //       username: "",
-                      //       displayName: "",
-                      //       authenticated: false,
-                      //       userRole: "CUSTOMER",
-                      //       accessExpiration: 0,
-                      //       refreshExpiration: 0,
-                      //     });
-                      //     logoutResponse = data;
-                      //     console.log(logoutResponse);
-                      //     navigate("/", { state: { logoutResponse } });
-                      //   } else {
-                      //     return false;
-                      //   }
-                      // }}
                     />
                   </div>
                 )}
@@ -213,7 +185,7 @@ const Header = () => {
             }}
           >
             <HiMiniBars3BottomLeft title="More" />
-            <div className="absolute p-2 mt-28 -ml-7">
+            <div key={'links'} className="absolute p-2 mt-28 -ml-7">
               {isMoreOpen &&
                 links.map((item) => (
                   <div>

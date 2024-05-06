@@ -1,8 +1,0 @@
-package com.ecommerce.retail_electronicsapp.jwt;
-
-import org.springframework.stereotype.Service;
-
-@Service
-public class JwtService  {
-
-}

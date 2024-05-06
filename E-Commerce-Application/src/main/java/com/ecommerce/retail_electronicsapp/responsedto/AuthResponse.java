@@ -1,37 +1,32 @@
 package com.ecommerce.retail_electronicsapp.responsedto;
 
-import java.time.LocalDateTime;
-
-import org.springframework.beans.factory.annotation.Value;
-
 import com.ecommerce.retail_electronicsapp.enums.UserRole;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Getter
-@Setter
+@Builder @NoArgsConstructor
 public class AuthResponse {
 
 	private int userId;
 	private String username;
-	
-	private String displayName;
-	private LocalDateTime accessExpiration;
-	
-	private LocalDateTime refreshExpiration;
 	private UserRole userRole;
-	private boolean authenticated;
+	private String displayName;
+	private Boolean authenticated;
+	private long accessExpiration;
+	private long refreshExpiration;
 	
+	public AuthResponse(int userId, String username, UserRole userRole, String displayName, boolean authenticated, long accessExpiration, long refreshExpiration) {
+		super();
+		this.userId = userId;
+		this.username = username;
+		this.userRole = userRole;
+		this.displayName = displayName;
+		this.authenticated=authenticated;
+		this.accessExpiration = accessExpiration/1000;
+		this.refreshExpiration = refreshExpiration/1000;
+	}
 	
-//	public AuthResponse(@Value("${myapp.jwt.access.expiration}") long access,@Value("${myapp.jwt.refresh.expiration}") long refresh) {
-//		this.accessExpiration=access/1000;
-//		this.refreshExpiration=refresh/1000;
-//	}
 }

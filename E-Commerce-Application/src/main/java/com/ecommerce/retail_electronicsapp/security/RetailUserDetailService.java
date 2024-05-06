@@ -17,13 +17,12 @@ public class RetailUserDetailService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepo.findByUsername(username).map(RetailUserDetails::new)
-//				.map(user->new RetailUserDetails(user))
+		String usernames=username.split("@gmail.com")[0];
+		return userRepo.findByUsername(usernames)
+				.map(RetailUserDetails::new)
+//				.map(user->new RetailUserDetails(user.getUsername(),user.getPassword(),user.getUserRole()) )
 				.orElseThrow(()->new UsernameNotFoundException("Please enter a valid Email ID that you've registered with"));
 	}
 
 	
 }
-
-//.map(RetailUserDetails::new) : method reference parameter can be used only for functional interfaces
-//constructor should take only one parameter or else ambiguity will occur 

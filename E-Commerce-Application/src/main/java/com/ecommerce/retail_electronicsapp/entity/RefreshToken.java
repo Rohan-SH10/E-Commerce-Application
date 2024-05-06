@@ -1,31 +1,30 @@
 package com.ecommerce.retail_electronicsapp.entity;
 
+import java.util.Date;
 
-import java.time.LocalDateTime;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Getter
+@Entity @Getter @Table(name = "refreshTokens")
+@AllArgsConstructor @NoArgsConstructor
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class RefreshToken {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int tokenId;
+	@Column(length = 500)
 	private String token;
-	private LocalDateTime expiration;
-	private boolean isBlocked;
+	private Boolean isBlocked;
+	private Date expiration;
 	@ManyToOne
 	private User user;
 }
