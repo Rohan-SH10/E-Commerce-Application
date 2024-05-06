@@ -1,0 +1,49 @@
+package com.ecommerce.retail_electronicsapp.utility;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.ecommerce.retail_electronicsapp.entity.AccessToken;
+import com.ecommerce.retail_electronicsapp.entity.RefreshToken;
+import com.ecommerce.retail_electronicsapp.jwt.JwtService;
+import com.ecommerce.retail_electronicsapp.repository.AccessTokenRepository;
+import com.ecommerce.retail_electronicsapp.repository.RefreshTokenRepository;
+
+import lombok.AllArgsConstructor;
+
+@Component
+@AllArgsConstructor
+public class ScheduledJobs {
+
+	private AccessTokenRepository accessTokenRepository;
+	private RefreshTokenRepository refreshTokenRepository;
+	
+	@Scheduled(fixedDelay = 60000l)
+	public void deleteTokensIfBlocked() {
+//		List<AccessToken> at = accessTokenRepository.findAll();
+//		for(AccessToken act : at) {
+//		Date expiration = jwtService.getExpiration(act.getToken());
+//		if(new Date().after(expiration))
+//			accessTokenRepository.delete(act);
+//		}
+//		
+//		List<RefreshToken> rt = refreshTokenRepository.findAll();
+//		for(RefreshToken rct : rt) {
+//		Date expiration = jwtService.getExpiration(rct.getToken());
+//		if(new Date().after(expiration))
+//			refreshTokenRepository.delete(rct);
+//		}
+		
+		accessTokenRepository.deleteAll(accessTokenRepository.findAllByExpirationLessThan(LocalDateTime.now()));
+		refreshTokenRepository.deleteAll(refreshTokenRepository.findAllByExpirationLessThan(LocalDateTime.now()));
+		
+		accessTokenRepository.deleteAll(accessTokenRepository.findAllByIsBlocked(true));
+		refreshTokenRepository.deleteAll(refreshTokenRepository.findAllByIsBlocked(true));
+	}
+
+	
+}

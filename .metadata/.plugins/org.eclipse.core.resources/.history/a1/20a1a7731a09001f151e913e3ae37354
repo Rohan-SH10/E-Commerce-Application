@@ -1,0 +1,9 @@
+package com.ecommerce.retail_electronicsapp.repository;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import com.ecommerce.retail_electronicsapp.entity.Image;
+
+public interface ImageRepository extends MongoRepository<Image, String>{
+
+}
